@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Finder | Modern Scraper</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i data-lucide="zap" class="upload-icon" style="margin:0; width:32px; height:32px;"></i>
+                <h1>Email Finder</h1>
+            </div>
+            <div class="badge-status">
+                <span class="status-dot status-online"></span>
+                <span>System Online</span>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">TOTAL RECORDS</span>
+                <div class="stat-value" id="total">0</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">PROCESSED</span>
+                <div class="stat-value" id="processed" style="color: var(--accent);">0</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">SUCCESS</span>
+                <div class="stat-value" id="success" style="color: var(--success);">0</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">FAILED</span>
+                <div class="stat-value" id="failed" style="color: var(--error);">0</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Left Column: Controls -->
+            <div class="sidebar-cols">
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-title">
+                        <i data-lucide="settings" width="20"></i>
+                        Configuration
+                    </div>
+                    <div class="form-group">
+                        <label>Concurrent Workers</label>
+                        <input type="number" id="workers" value="2" min="1" max="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Tabs per Worker</label>
+                        <input type="number" id="tabs" value="2" min="1" max="5">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <i data-lucide="file-up" width="20"></i>
+                        Data Source
+                    </div>
+                    <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                        <input type="file" id="fileInput" hidden accept=".csv,.xlsx,.xls">
+                        <i data-lucide="upload-cloud" class="upload-icon"></i>
+                        <div class="upload-text">
+                            <p><strong>Click to upload</strong> or drag & drop</p>
+                            <p style="font-size: 0.7rem; margin-top: 5px;">CSV, Excel (max 50MB)</p>
+                        </div>
+                        <div id="fileNameDisplay" class="file-name"></div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="uploadBtn" onclick="upload()">
+                        <i data-lucide="check-circle" width="18"></i>
+                        Confirm Upload
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column: Console -->
+            <div class="terminal-card card">
+                <div class="terminal-header">
+                    <div class="card-title" style="margin-bottom:0;">
+                        <i data-lucide="terminal" width="20"></i>
+                        Live Scanning Process
+                    </div>
+                    <div style="display:flex; gap: 8px;">
+                        <div style="width: 12px; height: 12px; border-radius: 50%; border: 1px solid #4ade80;"></div>
+                        <div style="width: 12px; height: 12px; border-radius: 50%; border: 1px solid #fbbf24;"></div>
+                        <div style="width: 12px; height: 12px; border-radius: 50%; border: 1px solid #f87171;"></div>
+                    </div>
+                </div>
+                <div class="terminal-body" id="logs">
+                    <div class="log-entry">
+                        <span class="log-time">[00:00:00]</span>
+                        <span class="log-info">System initialized. Waiting for file upload...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Float Action Bar -->
+        <div class="action-bar">
+            <div style="margin-right: auto; color: var(--text-secondary); display:flex; align-items:center; gap:10px;">
+                <span id="remainingCount" style="font-weight:600; color:var(--text-primary);">0</span>
+                <span style="font-size:0.8rem;">RECORDS REMAINING</span>
+            </div>
+            <button class="btn btn-success" id="downloadCsvBtn" onclick="downloadCSV()" disabled>
+                <i data-lucide="download" width="18"></i>
+                CSV
+            </button>
+            <button class="btn btn-success" id="downloadJsonBtn" onclick="downloadJSON()" disabled>
+                <i data-lucide="file-json" width="18"></i>
+                JSON
+            </button>
+            <button class="btn btn-primary" id="startBtn" onclick="start()" disabled>
+                <i data-lucide="play" width="18"></i>
+                Launch Scraper
+            </button>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

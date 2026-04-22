@@ -1,0 +1,5 @@
+build\main/
+dist/
+uploads/
+outputs/
+__pycache__/
